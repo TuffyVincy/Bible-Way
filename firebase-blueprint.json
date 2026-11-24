@@ -1,0 +1,231 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User preferences, passcode hash, reminder schedule, and bookmarked scripture references.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user who owns this profile."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Display name shown inside the app."
+        },
+        "themeMode": {
+          "type": "string",
+          "enum": ["light", "dark"],
+          "description": "Preferred light or dark reading theme."
+        },
+        "nightReadingWarmth": {
+          "type": "boolean",
+          "description": "Whether warm low-glare reading tint is enabled in dark mode."
+        },
+        "passcodeEnabled": {
+          "type": "boolean",
+          "description": "Whether the 4-digit privacy passcode lock is active."
+        },
+        "passcodeHash": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "SHA-256 hex digest of the salted 4-digit passcode."
+        },
+        "passcodeSalt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Random salt used to hash the user passcode."
+        },
+        "reminderEnabled": {
+          "type": "boolean",
+          "description": "Whether gentle daily reminders are enabled."
+        },
+        "morningReminderTime": {
+          "type": "string",
+          "maxLength": 5,
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "Morning scripture reminder time in HH:MM 24h format."
+        },
+        "eveningReminderTime": {
+          "type": "string",
+          "maxLength": 5,
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "Evening night-watch reminder time in HH:MM 24h format."
+        },
+        "bookmarkedVerseIds": {
+          "type": "array",
+          "description": "Bounded list of up to 100 bookmarked daily verse identifiers."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "displayName",
+        "themeMode",
+        "nightReadingWarmth",
+        "passcodeEnabled",
+        "passcodeHash",
+        "passcodeSalt",
+        "reminderEnabled",
+        "morningReminderTime",
+        "eveningReminderTime",
+        "bookmarkedVerseIds",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PrayerEntry": {
+      "title": "PrayerEntry",
+      "description": "A private prayer journal entry tied to a user.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the author."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Short heading for the prayer entry."
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "Full prayer reflection text."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["Strength", "Confession", "Gratitude", "Renewal"],
+          "description": "Prayer focus category."
+        },
+        "verseRef": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "Optional scripture reference linked to the prayer."
+        },
+        "answered": {
+          "type": "boolean",
+          "description": "Whether the user marked this prayer as answered."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the last edit."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "body",
+        "category",
+        "verseRef",
+        "answered",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AccountabilityCheckin": {
+      "title": "AccountabilityCheckin",
+      "description": "Daily purity progress and accountability reflection metadata (photos remain private on-device in IndexedDB).",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the owner."
+        },
+        "dateKey": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Calendar day key in YYYY-MM-DD format."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["steadfast", "overcame", "grace"],
+          "description": "Daily walk outcome."
+        },
+        "reflection": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Short personal reflection on the day."
+        },
+        "hasLocalPhoto": {
+          "type": "boolean",
+          "description": "Indicates whether an on-device accountability photo is stored for this date."
+        },
+        "photoCaption": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Short caption describing the visual accountability moment."
+        },
+        "urgesResisted": {
+          "type": "number",
+          "description": "Count of temptations paused and overcome during the day (0 to 100)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the last update."
+        }
+      },
+      "required": [
+        "ownerId",
+        "dateKey",
+        "status",
+        "reflection",
+        "hasLocalPhoto",
+        "photoCaption",
+        "urgesResisted",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user settings, hashed passcode config, reminder times, and bookmarked verse IDs."
+    },
+    "/users/{userId}/prayers/{prayerId}": {
+      "schema": { "$ref": "#/entities/PrayerEntry" },
+      "description": "Private prayer journal entries belonging strictly to {userId}."
+    },
+    "/users/{userId}/checkins/{checkinId}": {
+      "schema": { "$ref": "#/entities/AccountabilityCheckin" },
+      "description": "Daily accountability check-in records keyed by YYYY-MM-DD belonging strictly to {userId}."
+    }
+  }
+}

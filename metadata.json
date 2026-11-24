@@ -1,0 +1,6 @@
+{
+  "name": "Steadfast — Bible & Purity Companion",
+  "description": "A serene daily scripture, prayer journaling, visual accountability, and progress companion designed to help you walk in purity and renewal.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
